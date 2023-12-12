@@ -7,8 +7,8 @@ dependencies:
   - scikit-build
   - pyyaml
   - opencv
-  - mesa-libgl-devel-cos7-x86_64 
-  - mesa-dri-drivers-cos7-x86_64 
+  - mesa-libgl-devel-cos7-x86_64
+  - mesa-dri-drivers-cos7-x86_64
   - libxcb
   - glew
   - glfw

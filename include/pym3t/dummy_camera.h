@@ -13,7 +13,6 @@
 
 namespace m3t {
 
-
 /**
  * \brief \ref Camera that implements trivial implementations of ColorCamera
  *
@@ -23,10 +22,10 @@ namespace m3t {
 class DummyColorCamera : public ColorCamera {
  public:
   // Constructors, destructor, and setup method
-  DummyColorCamera(const std::string &name,
+  DummyColorCamera(const std::string& name,
                    bool use_depth_as_world_frame = false);
-  DummyColorCamera(const std::string &name,
-                   const std::filesystem::path &metafile_path);
+  DummyColorCamera(const std::string& name,
+                   const std::filesystem::path& metafile_path);
   ~DummyColorCamera();
   bool SetUp() override;
 
@@ -34,9 +33,8 @@ class DummyColorCamera : public ColorCamera {
   void set_use_depth_as_world_frame(bool use_depth_as_world_frame);
   void set_image(const cv::Mat& img);
   void set_intrinsics(const Intrinsics& intr);
-  void set_color2depth_pose(const Transform3fA & color2depth_pose);
-  void set_depth2color_pose(const Transform3fA & depth2color_pose);
-
+  void set_color2depth_pose(const Transform3fA& color2depth_pose);
+  void set_depth2color_pose(const Transform3fA& depth2color_pose);
 
   // Main method -> does nothing in this implementation
   bool UpdateImage(bool synchronized) override;
@@ -71,11 +69,10 @@ class DummyColorCamera : public ColorCamera {
 class DummyDepthCamera : public DepthCamera {
  public:
   // Constructors, destructor, and setup method
-  DummyDepthCamera(const std::string &name,
-                   bool use_color_as_world_frame,
+  DummyDepthCamera(const std::string& name, bool use_color_as_world_frame,
                    float depth_scale);
-  DummyDepthCamera(const std::string &name,
-                   const std::filesystem::path &metafile_path);
+  DummyDepthCamera(const std::string& name,
+                   const std::filesystem::path& metafile_path);
   ~DummyDepthCamera();
   bool SetUp() override;
 
@@ -83,8 +80,8 @@ class DummyDepthCamera : public DepthCamera {
   void set_use_color_as_world_frame(bool use_color_as_world_frame);
   void set_image(const cv::Mat& img);
   void set_intrinsics(const Intrinsics& intr);
-  void set_color2depth_pose(const Transform3fA & color2depth_pose);
-  void set_depth2color_pose(const Transform3fA & depth2color_pose);
+  void set_color2depth_pose(const Transform3fA& color2depth_pose);
+  void set_depth2color_pose(const Transform3fA& depth2color_pose);
   void set_depth_scale(float depth_scale);
 
   // Main method -> does nothing in this implementation

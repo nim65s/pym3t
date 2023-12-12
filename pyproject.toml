@@ -12,3 +12,6 @@ requires-python = ">=3.7"
 dependencies = [
     "numpy"
 ]
+
+[tool.isort]
+profile = "black"

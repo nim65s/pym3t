@@ -9,20 +9,19 @@ namespace m3t {
  * - intrinsics
  * For new images:
  * - image
- * 
-*/
+ *
+ */
 
 /**
  * DummyColorCamera implementation
-*/
+ */
 
-DummyColorCamera::DummyColorCamera(const std::string &name,
-                                           bool use_depth_as_world_frame)
-    : ColorCamera(name),
-      use_depth_as_world_frame_(use_depth_as_world_frame) {}
+DummyColorCamera::DummyColorCamera(const std::string& name,
+                                   bool use_depth_as_world_frame)
+    : ColorCamera(name), use_depth_as_world_frame_(use_depth_as_world_frame) {}
 
-DummyColorCamera::DummyColorCamera(
-    const std::string &name, const std::filesystem::path &metafile_path)
+DummyColorCamera::DummyColorCamera(const std::string& name,
+                                   const std::filesystem::path& metafile_path)
     : ColorCamera(name, metafile_path) {}
 
 DummyColorCamera::~DummyColorCamera() {}
@@ -31,45 +30,50 @@ bool DummyColorCamera::SetUp() {
   set_up_ = false;
   if (!metafile_path_.empty())
     if (!LoadMetaData()) return false;
-  if (!extrinsics_set_)
-  {
-    std::cerr << "DummyColorCamera::set_image color2depth_pose or depth2color_pose not set" << std::endl;
+  if (!extrinsics_set_) {
+    std::cerr << "DummyColorCamera::set_image color2depth_pose or "
+                 "depth2color_pose not set"
+              << std::endl;
     return false;
   }
-  if (use_depth_as_world_frame_)
-    set_camera2world_pose(color2depth_pose_);
+  if (use_depth_as_world_frame_) set_camera2world_pose(color2depth_pose_);
   SaveMetaDataIfDesired();
   set_up_ = true;
   initial_set_up_ = true;
   return true;
 }
 
-void DummyColorCamera::set_use_depth_as_world_frame(bool use_depth_as_world_frame) {
+void DummyColorCamera::set_use_depth_as_world_frame(
+    bool use_depth_as_world_frame) {
   use_depth_as_world_frame_ = use_depth_as_world_frame;
   set_up_ = false;
 }
 
-void DummyColorCamera::set_image(const cv::Mat& img){
-  if (img.type() != CV_8UC3){
-    std::string err_msg = "DummyColorCamera::set_image requires a 3-channel 8-bit unsigned int color image, provided: " 
-                          + std::to_string(img.channels()) + " channels and " + std::to_string(img.type()) + " opencv type code";
+void DummyColorCamera::set_image(const cv::Mat& img) {
+  if (img.type() != CV_8UC3) {
+    std::string err_msg =
+        "DummyColorCamera::set_image requires a 3-channel 8-bit unsigned int "
+        "color image, provided: " +
+        std::to_string(img.channels()) + " channels and " +
+        std::to_string(img.type()) + " opencv type code";
     throw std::invalid_argument(err_msg);
   }
   image_ = img;
 }
 
-void DummyColorCamera::set_intrinsics(const Intrinsics& _intrinsics)
-{
+void DummyColorCamera::set_intrinsics(const Intrinsics& _intrinsics) {
   intrinsics_ = _intrinsics;
 }
 
-void DummyColorCamera::set_color2depth_pose(const Transform3fA& color2depth_pose) {
+void DummyColorCamera::set_color2depth_pose(
+    const Transform3fA& color2depth_pose) {
   extrinsics_set_ = true;
   color2depth_pose_ = color2depth_pose;
   depth2color_pose_ = color2depth_pose.inverse();
 }
 
-void DummyColorCamera::set_depth2color_pose(const Transform3fA& depth2color_pose) {
+void DummyColorCamera::set_depth2color_pose(
+    const Transform3fA& depth2color_pose) {
   extrinsics_set_ = true;
   depth2color_pose_ = depth2color_pose;
   color2depth_pose_ = depth2color_pose.inverse();
@@ -77,12 +81,12 @@ void DummyColorCamera::set_depth2color_pose(const Transform3fA& depth2color_pose
 
 bool DummyColorCamera::UpdateImage(bool synchronized) {
   if (!set_up_) {
-    std::cerr << "Set up dummy color camera " << name_ << " first"
-              << std::endl;
+    std::cerr << "Set up dummy color camera " << name_ << " first" << std::endl;
     return false;
   }
   if (image_.empty()) {
-    std::cerr << "DummyColorCamera " << name_ << " image was not set" << std::endl;
+    std::cerr << "DummyColorCamera " << name_ << " image was not set"
+              << std::endl;
     return false;
   }
 
@@ -130,21 +134,19 @@ bool DummyColorCamera::LoadMetaData() {
   return true;
 }
 
-
 /**
  * DummyDepthCamera implementation
-*/
+ */
 
-DummyDepthCamera::DummyDepthCamera(const std::string &name,
+DummyDepthCamera::DummyDepthCamera(const std::string& name,
                                    bool use_color_as_world_frame,
                                    float depth_scale)
-    : DepthCamera{name},
-      use_color_as_world_frame_{use_color_as_world_frame} {
+    : DepthCamera{name}, use_color_as_world_frame_{use_color_as_world_frame} {
   set_depth_scale(depth_scale);
 }
 
-DummyDepthCamera::DummyDepthCamera(
-    const std::string &name, const std::filesystem::path &metafile_path)
+DummyDepthCamera::DummyDepthCamera(const std::string& name,
+                                   const std::filesystem::path& metafile_path)
     : DepthCamera{name, metafile_path} {}
 
 DummyDepthCamera::~DummyDepthCamera() {}
@@ -153,13 +155,13 @@ bool DummyDepthCamera::SetUp() {
   set_up_ = false;
   if (!metafile_path_.empty())
     if (!LoadMetaData()) return false;
-  if (!extrinsics_set_)
-  {
-    std::cerr << "DummyDepthCamera::set_image color2depth_pose or depth2color_pose not set" << std::endl;
+  if (!extrinsics_set_) {
+    std::cerr << "DummyDepthCamera::set_image color2depth_pose or "
+                 "depth2color_pose not set"
+              << std::endl;
     return false;
   }
-  if (use_color_as_world_frame_)
-    set_camera2world_pose(depth2color_pose_);
+  if (use_color_as_world_frame_) set_camera2world_pose(depth2color_pose_);
   set_up_ = true;
   initial_set_up_ = true;
   return true;
@@ -171,27 +173,31 @@ void DummyDepthCamera::set_use_color_as_world_frame(
   set_up_ = false;
 }
 
-void DummyDepthCamera::set_image(const cv::Mat& img){
-  if (img.type() != CV_16UC1){
-    std::string err_msg = "DummyColorCamera::set_image requires a 1-channel 16-bit unsigned int depth image, provided: " 
-                        + std::to_string(img.channels()) + " channels and " + std::to_string(img.type()) + " opencv type code";
+void DummyDepthCamera::set_image(const cv::Mat& img) {
+  if (img.type() != CV_16UC1) {
+    std::string err_msg =
+        "DummyColorCamera::set_image requires a 1-channel 16-bit unsigned int "
+        "depth image, provided: " +
+        std::to_string(img.channels()) + " channels and " +
+        std::to_string(img.type()) + " opencv type code";
     throw std::invalid_argument(err_msg);
   }
   image_ = img;
 }
 
-void DummyDepthCamera::set_intrinsics(const Intrinsics& _intrinsics)
-{
+void DummyDepthCamera::set_intrinsics(const Intrinsics& _intrinsics) {
   intrinsics_ = _intrinsics;
 }
 
-void DummyDepthCamera::set_color2depth_pose(const Transform3fA& color2depth_pose) {
+void DummyDepthCamera::set_color2depth_pose(
+    const Transform3fA& color2depth_pose) {
   extrinsics_set_ = true;
   color2depth_pose_ = color2depth_pose;
   depth2color_pose_ = color2depth_pose.inverse();
 }
 
-void DummyDepthCamera::set_depth2color_pose(const Transform3fA& depth2color_pose) {
+void DummyDepthCamera::set_depth2color_pose(
+    const Transform3fA& depth2color_pose) {
   extrinsics_set_ = true;
   depth2color_pose_ = depth2color_pose;
   color2depth_pose_ = depth2color_pose.inverse();
@@ -203,12 +209,12 @@ void DummyDepthCamera::set_depth_scale(float depth_scale) {
 
 bool DummyDepthCamera::UpdateImage(bool synchronized) {
   if (!set_up_) {
-    std::cerr << "Set up dummy depth camera " << name_ << " first"
-              << std::endl;
+    std::cerr << "Set up dummy depth camera " << name_ << " first" << std::endl;
     return false;
   }
   if (image_.empty()) {
-    std::cerr << "DummyDepthCamera " << name_ << " image was not set" << std::endl;
+    std::cerr << "DummyDepthCamera " << name_ << " image was not set"
+              << std::endl;
     return false;
   }
 
