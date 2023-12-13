@@ -2,11 +2,11 @@
 #ifndef M3t_INCLUDE_M3t_dummy_camera_H_
 #define M3t_INCLUDE_M3t_dummy_camera_H_
 
-#include <filesystem>
 #include <m3t/camera.h>
 #include <m3t/common.h>
 
 #include <chrono>
+#include <filesystem>
 #include <iostream>
 #include <mutex>
 #include <opencv2/opencv.hpp>
